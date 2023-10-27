@@ -1,0 +1,7 @@
+test*
+*.jpg
+*.pdf
+*.zip
+output*
+data*
+macocr.sh
