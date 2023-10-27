@@ -226,7 +226,7 @@ def sort_text(page: ET.Element, row2_y: float, chara_height: float, empty_line_w
     for text in page:
         if text.attrib['TYPE'] != '本文':
             continue
-        if text.attrib['STRING'] == '':
+        if 'STRING' not in text.attrib.keys() or text.attrib['STRING'] == '':
             continue
         text_list.append(text.attrib)
         if int(text_list[-1]['Y']) > row2_y:
@@ -234,7 +234,7 @@ def sort_text(page: ET.Element, row2_y: float, chara_height: float, empty_line_w
         else:
             text_list[-1]['ROW'] = 1
     if text_list == []:
-        return [], False
+        return [], False, False
 
     text_list = sorted(text_list, key=lambda x: int(x['X']), reverse=True)
     text_list = sorted(text_list, key=lambda x: int(x['ROW']))
