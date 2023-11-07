@@ -295,10 +295,15 @@ def get_chara_height(page: ET.Element) -> float:
     for text in page:
         if text.attrib['TYPE'] != '本文':
             continue
+        if 'STRING' not in text.attrib.keys():
+            continue
         chara_size = int(text.attrib['HEIGHT'])/len(text.attrib['STRING'])
         chara_sizes.append(chara_size)
     #chara_size = statistics.median(chara_sizes)
-    chara_size = sum(chara_sizes)/len(chara_sizes)
+    if len(chara_sizes) == 0:
+        return False
+    else:
+        chara_size = sum(chara_sizes)/len(chara_sizes)
     return chara_size
 
 
@@ -331,9 +336,10 @@ def get_text(input_file: str, row_num: int) -> List[str]:
     is_next_page_indent = True
 
     for i, page in enumerate(root):
-        if i == 0:
-            chara_height = get_chara_height(page)
-            empty_line_width = get_empty_line_width(page)
+        chara_height = get_chara_height(page)
+        if chara_height is False:
+            continue
+        empty_line_width = get_empty_line_width(page)
         new_text, is_first_indent, is_next_page_indent = sort_text(page, row2_y, chara_height, empty_line_width, is_next_page_indent)
         if is_first_indent:
             text.extend(new_text)
