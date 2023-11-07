@@ -295,7 +295,7 @@ def get_chara_height(page: ET.Element) -> float:
     for text in page:
         if text.attrib['TYPE'] != '本文':
             continue
-        if 'STRING' not in text.attrib.keys():
+        if 'STRING' not in text.attrib.keys() or text.attrib['STRING'] == '':
             continue
         chara_size = int(text.attrib['HEIGHT'])/len(text.attrib['STRING'])
         chara_sizes.append(chara_size)
